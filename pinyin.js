@@ -619,3 +619,32 @@ function ucfirst(l1) {
     return first + spare;
   }
 }
+
+// var pinyin = codefans_net_CC2PY("你好吗");
+// console.log(`-----=====`, pinyin)
+
+var path = require('path'); //系统路径模块
+
+let fs = require('fs');
+
+var file = path.join(__dirname, '../test/provinceData.json'); //文件路径，__dirname为当前运行js文件的目录
+
+console.log(`-----file=====`, file);
+fs.readFile(file, 'utf-8', (err, res) => {
+  if (err) {
+    console.log(err);
+    reject('read file error');
+  }
+  var data = JSON.parse(res);
+  // console.log(`-----data=====`, data)
+  data.forEach(v => {
+    v['pingyin'] = codefans_net_CC2PY(v['name']);
+  });
+  // console.log(`-----=====`, JSON.stringify(data))
+  var data1 = JSON.stringify(data);
+  fs.writeFile(path.join(__dirname, '../test/provinceDataPinYin.json'), data1, err => {
+    if (err) {
+      throw err;
+    }
+  });
+});
