@@ -10,9 +10,9 @@ import (
 
 )
 const (
-	SERVER_IP       = "127.0.0.1"
-	SERVER_PORT     = 10006
-	SERVER_RECV_LEN = 3
+	SERVER_IP       = "192.168.1.200"
+	SERVER_PORT     = 6001
+	SERVER_RECV_LEN = 50
 )
 
 
