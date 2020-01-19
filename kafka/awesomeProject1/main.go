@@ -18,7 +18,7 @@ func consumer_test() {
 	config.Version = sarama.V0_11_0_2
 
 	// consumer
-	consumer, err := sarama.NewConsumer([]string{"192.168.66.34:9092"}, config)
+	consumer, err := sarama.NewConsumer([]string{"31.0.223.15:9092"}, config)
 	if err != nil {
 		fmt.Printf("consumer_test create consumer error %s\n", err.Error())
 		return
@@ -26,7 +26,7 @@ func consumer_test() {
 
 	defer consumer.Close()
 
-	partition_consumer, err := consumer.ConsumePartition("topic002", 0, sarama.OffsetNewest)
+	partition_consumer, err := consumer.ConsumePartition("topic_e_access_log", 0, sarama.OffsetNewest)
 	if err != nil {
 		fmt.Printf("try create partition_consumer error %s\n", err.Error())
 		return

@@ -4,16 +4,18 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"strconv"
 )
 
 const (
-	SERVER_IP       = "127.0.0.1"
-	SERVER_PORT     = 10006
-	SERVER_RECV_LEN = 10
+	SERVER_IP       = "192.168.1.200"
+	SERVER_PORT     = "6001"
+
+	//SERVER_IP       = "127.0.0.1"
+	//SERVER_PORT     = "10006"
+	SERVER_RECV_LEN = 50
 )
 func main() {
-	address := SERVER_IP + ":" + strconv.Itoa(SERVER_PORT)
+	address := SERVER_IP + ":" + SERVER_PORT
 	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {
 		fmt.Println(err)
