@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"github.com/satori/go.uuid"
 	"log"
-	"login/commonMap"
 	"os"
 	"reflect"
 	"strconv"
@@ -20,12 +19,13 @@ import (
 
 // 时间转换 设置时区 东巴区
 var cstZone = time.FixedZone("CST", 8*3600)
+
 func init() {
 	time.Local = cstZone
 }
 func GetTimeStringByDate(date string) string {
 	location, err := time.ParseInLocation("2006-01-02T15:04:05+08:00", date, cstZone)
-ErrInfo("GetTimeStringByDate",err)
+	ErrInfo("GetTimeStringByDate", err)
 	return location.Format("2006-01-02 15:04:05")
 }
 func GetUUId() string {
@@ -34,13 +34,14 @@ func GetUUId() string {
 	return strings.Replace(uid.String(), "-", "", -1)
 
 }
+
 // 生成token
-func GenerateUserToken() (*commonMap.Token, error) {
+func GenerateUserToken() (*Token, error) {
 	tokenByte, err := GenerateUserTokenStruct()
 	if err != nil {
 		return nil, err
 	}
-	tokenInfo := commonMap.Token{}
+	tokenInfo := Token{}
 	err = json.Unmarshal(tokenByte, &tokenInfo)
 	if err != nil {
 		return nil, err
@@ -68,10 +69,15 @@ func GetNowTimeStamp() int {
 	return timeStamp
 }
 
+type Token struct {
+	Token      string `json:"token"`       // 凭证
+	Expiretime string `json:"expire_time"` // 过期时间
+}
+
 func GenerateUserTokenStruct() (tokenByte []byte, err error) {
 	// 获取有效时间
 
-	tokenStruct := commonMap.Token{
+	tokenStruct := Token{
 		Token:      GetUUId(),
 		Expiretime: GetNowExpiretime(),
 	}
@@ -105,30 +111,31 @@ func GetDateFormat(timeStamp int64, formatString string) (date string, err error
 	}
 	return t.Format("2006-01-02 15:04:05"), nil
 }
-func ErrInfo(funcName string,err error)  {
-	if err!=nil  {
-		log.Panicln(fmt.Sprintf("%v err %v:",funcName,err))
+func ErrInfo(funcName string, err error) {
+	if err != nil {
+		log.Panicln(fmt.Sprintf("%v err %v:", funcName, err))
 	}
 }
-func ErrInfoPanic(funcName string,err error)  {
-	if err!=nil  {
-		panic(fmt.Sprintf("%v err %v:",funcName,err))
+func ErrInfoPanic(funcName string, err error) {
+	if err != nil {
+		panic(fmt.Sprintf("%v err %v:", funcName, err))
 	}
 }
+
 //func main() {
 //	call(map[string]interface{}{"a":a},"a",3)
 //}
 //func a(b int)  {
 //	fmt.Println(b)
 //}
-func Call(funMap map[string]interface{},name string,parames...interface{})  {
-	f:=reflect.ValueOf(funMap[name])
-	if len(parames)!=f.Type().NumIn() {
+func Call(funMap map[string]interface{}, name string, parames ...interface{}) {
+	f := reflect.ValueOf(funMap[name])
+	if len(parames) != f.Type().NumIn() {
 		log.Panicln("参数不对")
 	}
-	in:=make([]reflect.Value,len(parames))
+	in := make([]reflect.Value, len(parames))
 	for i, parame := range parames {
-		in[i]=reflect.ValueOf(parame)
+		in[i] = reflect.ValueOf(parame)
 	}
 	f.Call(in)
 }
